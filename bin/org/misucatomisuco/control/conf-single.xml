@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+ http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd"           
+           >
+
+	<bean id="seqgrid1" class="org.misucatomisuco.model.MisuSeqGrid">
+        <constructor-arg index="0" type="int" value="1999"/>
+	</bean>
+	
+	<bean id="control1" class="org.misucatomisuco.control.CMisuPanelString">
+        <constructor-arg index="0" type="org.misucatomisuco.control.IMisuOut">
+	  		<ref bean="out" />
+        </constructor-arg>	
+        <constructor-arg index="1" type="int" value="1"/>	
+		<property name="seqgrid">		
+	  		<ref bean="seqgrid1" />
+        </property>	
+	</bean>
+	
+	
+	<bean id="control2" class="org.misucatomisuco.control.CMisuPanelFade">
+        <constructor-arg index="0" type="org.misucatomisuco.control.IMisuOut">
+	  		<ref bean="out" />
+        </constructor-arg>	
+        <constructor-arg index="1" type="int" value="1"/>	
+	</bean>
+	
+	<bean id="control3" class="org.misucatomisuco.control.CMisuPanelFadeInternal">
+        <constructor-arg index="0" type="org.misucatomisuco.model.MisuCcMapItem[]">
+	  		<ref bean="ccmap_intern" />
+        </constructor-arg>	
+		<property name="pdst">		
+	  		<ref bean="prog" />
+        </property>	
+		<property name="wdst">		
+	  		<ref bean="panel1" />
+        </property>	
+	</bean>
+	
+	<bean id="ccmap01_01" class="org.misucatomisuco.model.MisuCcMapItem">
+		<property name="name" value="Range" />
+		<property name="cc" value="0" />
+		<property name="min" value="1" />
+		<property name="max" value="10" />
+	</bean>
+	
+	<bean id="ccmap01_02" class="org.misucatomisuco.model.MisuCcMapItem">
+		<property name="name" value="Base" />
+		<property name="cc" value="0" />
+		<property name="min" value="0" />
+		<property name="max" value="50" />
+	</bean>
+	
+	<bean id="ccmap01_03" class="org.misucatomisuco.model.MisuCcMapItem">
+		<property name="name" value="Scale" />
+		<property name="cc" value="0" />
+		<property name="min" value="1" />
+		<property name="max" value="20" />
+	</bean>
+	
+	<bean id="ccmap01_04" class="org.misucatomisuco.model.MisuCcMapItem">
+		<property name="name" value="Prog" />
+		<property name="cc" value="0" />
+		<property name="min" value="0" />
+		<property name="max" value="64" />
+	</bean>
+	
+	<bean id="ccmap01_05" class="org.misucatomisuco.model.MisuCcMapItem">
+		<property name="name" value="tHeartbeat" />
+		<property name="cc" value="0" />
+		<property name="min" value="1" />
+		<property name="max" value="100" />
+	</bean>
+	
+	<bean id="ccmap01_06" class="org.misucatomisuco.model.MisuCcMapItem">
+		<property name="name" value="loopsize" />
+		<property name="cc" value="0" />
+		<property name="min" value="0" />
+		<property name="max" value="100" />
+	</bean>
+	
+	<util:list id="ccmap_intern" >
+		<ref bean="ccmap01_01" />
+		<ref bean="ccmap01_02" />
+		<ref bean="ccmap01_03" />
+		<ref bean="ccmap01_04" />
+		<ref bean="ccmap01_05" />
+		<ref bean="ccmap01_06" />
+	</util:list>                      
+	
+	<bean id="panel1" class="org.misucatomisuco.view.MisuPanelString">
+		<property name="control">
+			<ref bean="control1" />
+		</property>
+		<property name="drawers">		
+	  		<ref bean="drawers" />
+        </property>	
+		<property name="seqgrid">		
+	  		<ref bean="seqgrid1" />
+        </property>	
+	</bean>
+	
+	<!-- 
+	<bean id="drawer1" class="org.misucatomisuco.view.MisuPanelDrawWorm" />
+	-->
+	<bean id="drawer1" class="org.misucatomisuco.view.MisuPanelDrawSeqGridBottom" />
+	<bean id="drawer2" class="org.misucatomisuco.view.MisuPanelDrawSeqGridOver" />
+	
+	<util:list id="drawers" >
+		<ref bean="drawer1" />
+		<ref bean="drawer2" />
+	</util:list>                      
+	
+	
+	<bean id="panel2" class="org.misucatomisuco.view.MisuPanelFade">
+        <constructor-arg index="0" type="org.misucatomisuco.model.MisuCcMapItem[]">
+	  		<ref bean="ccmap_intern" />
+        </constructor-arg>		
+		<property name="control">
+			<ref bean="control3" />
+		</property>
+	</bean>
+	
+	<util:list id="pans" >
+		<ref bean="panel1" />
+		<ref bean="panel2" />
+	</util:list>                      
+	
+	<bean id="frame" class="org.misucatomisuco.view.MisuFrame">
+		<!--
+		<property name="w" value="640" />
+		<property name="h" value="340" />
+		-->
+		<property name="mp">
+			<ref bean="prog" />
+		</property>
+		<property name="panels">
+			<ref bean="pans" />
+		</property>
+	</bean>
+
+	
+	<bean id="out1" class="org.misucatomisuco.control.MisuMidi" />
+	
+	<bean id="out2" class="org.misucatomisuco.control.MisuMidiOSC">
+        <constructor-arg index="0" type="java.lang.String" value="192.168.1.69"/>	
+        <constructor-arg index="1" type="int" value="9669"/>	
+	</bean>
+	
+	<util:list id="outs" ><!--
+		<ref bean="out1" />
+		--><ref bean="out2" />
+	</util:list>
+	
+	<bean id="out" class="org.misucatomisuco.control.MisuOutMulti">
+
+		<property name="ios">
+			<ref bean="outs" />
+		</property>
+	</bean>
+
+	<bean id="prog" class="org.misucatomisuco.control.MisuProg">
+		<property name="progCh" value="1" />
+		<property name="pans">
+			<ref bean="pans" />
+		</property>
+		<property name="mm">
+			<ref bean="out" />
+		</property>
+		<property name="heartbeat">
+			<ref bean="heartbeat" />
+		</property>
+	</bean>
+	
+	<bean id="heartbeat" class="org.misucatomisuco.control.MisuHeartBeat">
+        <constructor-arg index="0" type="org.misucatomisuco.control.MisuSeqPlayer">
+	  		<ref bean="seqplayer" />
+        </constructor-arg>		
+        <constructor-arg index="1" type="org.misucatomisuco.view.MisuFrame">
+	  		<ref bean="frame" />
+        </constructor-arg>
+        <constructor-arg index="2" type="org.misucatomisuco.view.MisuPanel[]">
+	  		<ref bean="pans" />
+        </constructor-arg>		
+	</bean>
+
+	<bean id="seqplayer" class="org.misucatomisuco.control.MisuSeqPlayer">
+		<property name="channel" value="1"/>
+		<property name="grid">
+			<ref bean="seqgrid1" />
+		</property>
+		<property name="player">
+			<ref bean="signalplayer" />
+		</property>
+	</bean>
+	
+	<bean id="signalplayer" class="org.misucatomisuco.control.MisuSignalPlayer">
+		<property name="out">
+			<ref bean="out" />
+		</property>
+	</bean>	
+</beans>
